@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/detail_product_announce"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="fragments.browsing_products.DetailProductFragment"
+    android:clickable="true"
+    android:focusable="true"
+    >
+
+
+    <fragment
+        android:id="@+id/fragment_vendor_integration"
+        android:name="com.example.vgxchange.VendorFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_vendor" />
+
+    <fragment
+        android:id="@+id/fragment_product_information_fragment"
+        android:name="com.example.vgxchange.ProductBasicInformationFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_vendor_integration"
+        tools:layout="@layout/fragment_product_basic_information" />
+
+    <Button
+        android:id="@+id/btnBuyingProposition"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/buying_proposition"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_product_information_fragment" />
+
+    <Button
+        android:id="@+id/btnRentalProposition"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/rental_proposition"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnBuyingProposition" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

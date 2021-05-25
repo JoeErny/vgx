@@ -1,0 +1,218 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "d54fde1e31a55e55a190f39b92f2e34e",
+    "entities": [
+      {
+        "tableName": "product",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idproduct` TEXT NOT NULL, `parution` TEXT, `announceType` TEXT, `announceState` TEXT, `price` REAL NOT NULL, `photoLink` TEXT, `product_game_idgame` TEXT, `product_game_name` TEXT, `product_game_description` TEXT, `product_game_rating` INTEGER, `product_game_game_category_idCategory` TEXT, `product_game_game_category_label` TEXT, `product_announcer_id` TEXT, `product_announcer_name` TEXT, `product_announcer_firstname` TEXT, `product_announcer_mail` TEXT, `product_announcer_login` TEXT, `product_announcer_telephone` TEXT, `product_announcer_password` TEXT, PRIMARY KEY(`idproduct`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "idproduct",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parution",
+            "columnName": "parution",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "announceType",
+            "columnName": "announceType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "announceState",
+            "columnName": "announceState",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "photoLink",
+            "columnName": "photoLink",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "game.id",
+            "columnName": "product_game_idgame",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "game.name",
+            "columnName": "product_game_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "game.description",
+            "columnName": "product_game_description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "game.rating",
+            "columnName": "product_game_rating",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "game.category.id",
+            "columnName": "product_game_game_category_idCategory",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "game.category.label",
+            "columnName": "product_game_game_category_label",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "announcer.id",
+            "columnName": "product_announcer_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "announcer.name",
+            "columnName": "product_announcer_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "announcer.firstname",
+            "columnName": "product_announcer_firstname",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "announcer.mail",
+            "columnName": "product_announcer_mail",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "announcer.login",
+            "columnName": "product_announcer_login",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "announcer.telephone",
+            "columnName": "product_announcer_telephone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "announcer.password",
+            "columnName": "product_announcer_password",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idproduct"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "game",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idgame` TEXT NOT NULL, `name` TEXT, `description` TEXT, `rating` INTEGER NOT NULL, `game_category_idCategory` TEXT, `game_category_label` TEXT, PRIMARY KEY(`idgame`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "idgame",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rating",
+            "columnName": "rating",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category.id",
+            "columnName": "game_category_idCategory",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "category.label",
+            "columnName": "game_category_label",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idgame"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "category",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idCategory` TEXT NOT NULL, `label` TEXT, PRIMARY KEY(`idCategory`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "idCategory",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "label",
+            "columnName": "label",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "idCategory"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd54fde1e31a55e55a190f39b92f2e34e')"
+    ]
+  }
+}

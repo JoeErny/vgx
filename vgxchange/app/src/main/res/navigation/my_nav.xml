@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/browsingFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.vgxchange.fragments.menu_navigation.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/home_fragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_browsingFragment"
+            app:destination="@id/browsingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/browsingFragment"
+        android:name="com.example.vgxchange.fragments.browsing_products.BrowsingProductsFragment"
+        android:label="Rechercher"
+        tools:layout="@layout/browsing_products">
+        <action
+            android:id="@+id/action_browsingFragment_to_myRowProduct"
+            app:destination="@id/myRowProduct" />
+        <action
+            android:id="@+id/action_browsingFragment_to_detail_product_announce"
+            app:destination="@id/detail_product_announce" />
+        <action
+            android:id="@+id/action_browsingFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.example.vgxchange.fragments.menu_navigation.UserFragment"
+        android:label="Mon profil"
+        tools:layout="@layout/fragment_user" >
+        <action
+            android:id="@+id/action_userFragment_to_connectionFragment"
+            app:destination="@id/connectionFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_profilFragment"
+            app:destination="@id/profilFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_addProductFragment"
+            app:destination="@id/addProductFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_myProductFragment"
+            app:destination="@id/myProductFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_usersPropositionsFragment"
+            app:destination="@id/usersPropositionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profilFragment"
+        android:name="com.example.vgxchange.fragments.user_management.ProfilFragment"
+        android:label="@string/mon_profil"
+        tools:layout="@layout/profile_page" />
+    <fragment
+        android:id="@+id/subscriptionFragment"
+        android:name="com.example.vgxchange.fragments.user_management.SubscriptionFragment"
+        android:label="Connection"
+        tools:layout="@layout/fragment_subscription" />
+    <fragment
+        android:id="@+id/connectionFragment"
+        android:name="com.example.vgxchange.fragments.user_management.ConnectionFragment"
+        android:label="Connection"
+        tools:layout="@layout/fragment_connection">
+        <action
+            android:id="@+id/action_connectionFragment_to_subscriptionFragment"
+            app:destination="@id/subscriptionFragment" />
+        <action
+            android:id="@+id/action_connectionFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detail_product_announce"
+        android:name="com.example.vgxchange.fragments.browsing_products.DetailProductFragment"
+        android:label="Détail du produit"
+        tools:layout="@layout/detail_product_announce" >
+        <action
+            android:id="@+id/action_detail_product_announce_to_buyingProposal"
+            app:destination="@id/buyingProposal" />
+        <action
+            android:id="@+id/action_detail_product_announce_to_rentalProposal"
+            app:destination="@id/rentalProposal" />
+    </fragment>
+    <fragment
+        android:id="@+id/usersPropositionsFragment"
+        android:name="com.example.vgxchange.fragments.make_proposition.UsersPropositionsFragment"
+        android:label="Mes propositions"
+        tools:layout="@layout/fragment_users_propositions" >
+        <action
+            android:id="@+id/action_usersPropositionsFragment_to_buyingProposalDetail"
+            app:destination="@id/buyingProposalDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/myRowProduct"
+        android:name="com.example.vgxchange.fragments.browsing_products.ProductAnnounceAdapter"
+        android:label="Détail du produit"
+        tools:layout="@layout/my_row_product">
+        <action
+            android:id="@+id/action_myRowProduct_to_detail_product_announce"
+            app:destination="@id/detail_product_announce" />
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/buyingProposal"
+        android:name="com.example.vgxchange.fragments.make_proposition.BuyingProposalFragment"
+        android:label="Proposition d'achat"
+        tools:layout="@layout/fragment_buying_proposal" >
+        <action
+            android:id="@+id/action_buyingProposal_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_buyingProposal_to_usersPropositionsFragment"
+            app:destination="@id/usersPropositionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rentalProposal"
+        android:name="com.example.vgxchange.fragments.make_proposition.RentalProposalFragment"
+        android:label="Proposition de location"
+        tools:layout="@layout/fragment_rental_proposal" >
+        <action
+            android:id="@+id/action_rentalProposal_to_usersPropositionsFragment"
+            app:destination="@id/usersPropositionsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addProductFragment"
+        android:name="com.example.vgxchange.fragments.adding_product_announce.AddProductFragment"
+        android:label="@string/Add_product"
+        tools:layout="@layout/fragment_add_product">
+        <action
+            android:id="@+id/action_addProductFragment_to_myProductFragment"
+            app:destination="@id/myProductFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myProductFragment"
+        android:name="com.example.vgxchange.fragments.my_product.MyProductFragment"
+        android:label="@string/My_product"
+        tools:layout="@layout/fragment_my_product" />
+    <fragment
+        android:id="@+id/buyingProposalDetail"
+        android:name="com.example.vgxchange.fragments.make_proposition.BuyingProposalDetail"
+        android:label="@string/proposal_detail"
+        tools:layout="@layout/fragment_buying_proposal_detail" >
+        <action
+            android:id="@+id/action_buyingProposalDetail_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_buyingProposalDetail_to_ratingFragment"
+            app:destination="@id/ratingFragment" />
+        <action
+            android:id="@+id/action_buyingProposalDetail_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
+        <action
+            android:id="@+id/action_buyingProposalDetail_to_usersPropositionsFragment"
+            app:destination="@id/usersPropositionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ratingFragment"
+        android:name="com.example.vgxchange.fragments.rating.RatingFragment"
+        android:label="@string/rating"
+        tools:layout="@layout/fragment_rating" >
+        <action
+            android:id="@+id/action_ratingFragment_to_usersPropositionsFragment"
+            app:destination="@id/usersPropositionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.example.vgxchange.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" >
+        <action
+            android:id="@+id/action_paymentFragment_to_usersPropositionsFragment"
+            app:destination="@id/usersPropositionsFragment" />
+    </fragment>
+
+</navigation>

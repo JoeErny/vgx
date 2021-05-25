@@ -1,0 +1,109 @@
+<resources>
+    <string name="app_name">VGXchange</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="param">Paramètres</string>
+    <string name="transaction">Transactions</string>
+    <string name="annoncement">Annonces</string>
+    <string name="hello">Bonjourd</string>
+    <string name="profil">Profil</string>
+    <string name="subscribe_to_VGXchange">Inscrivez-vous à VGXchange</string>
+    <string name="first_name">Prénom</string>
+    <string name="name">Nom</string>
+    <string name="mail">Adresse mail</string>
+    <string name="phone_number">Numéro de téléphone</string>
+    <string name="password">Mots de passe</string>
+    <string name="create_your_account">Créez votre compte</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="game_name">Jeu :</string>
+    <string name="parution_date">Date :</string>
+    <string name="price">Prix souhaité :</string>
+    <string name="rental_proposition">Proposer location</string>
+    <string name="buying_proposition">Proposer achat</string>
+    <string name="category">Catégorie :</string>
+    <string name="proposition_state">Etat:</string>
+    <string name="proposed_price">Prix proposé</string>
+    <string name="proposed_rental_duration">Durée proposée (j):</string>
+    <string name="proposed_rental_startdate">Date de début proposée</string>
+    <string name="proposed_rental_enddate">Date de fin proposée</string>
+    <string name="send_proposition">Envoyer la proposition</string>
+    <string name="currency">€</string>
+    <string name="name_vendor">Nom :</string>
+    <string name="my_proposals">Mes propositions</string>
+    <string name="received_proposals">Propositions reçues</string>
+    <string name="rate_terminated_proposition">Noter l echange (si TERMINATED)</string>
+    <string name="proposal_detail">Detail de la proposition</string>
+    <string name="from">Du</string>
+    <string name="to">au</string>
+    <string name="date_start">START</string>
+    <string name="date_end">END</string>
+    <string name="rental_label">Location</string>
+    <string name="state_label">Statut:</string>
+    <string name="state">State</string>
+    <string name="DefaultButtonLabel">Boutton action proposition</string>
+    <string name="decline_proposal">Décliner la proposition</string>
+    <string name="accept_proposal">Accepter la proposition</string>
+
+
+    <string-array name="users">
+        <item>Jordan</item>
+        <item>Martin</item>
+        <item>Corentin</item>
+        <item>Joé</item>
+        <item>Hulk</item>
+        <item>Jordan</item>
+        <item>Martin</item>
+        <item>Corentin</item>
+        <item>Joé</item>
+        <item>Hulk</item>
+        <item>Jordan</item>
+        <item>Martin</item>
+        <item>Corentin</item>
+        <item>Joé</item>
+        <item>Hulk</item>
+        <item>Jordan</item>
+        <item>Martin</item>
+        <item>Corentin</item>
+        <item>Joé</item>
+        <item>Hulk</item>
+    </string-array>
+    string-array>
+
+    <string-array name="description">
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+        <item>Description</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="noter_l_annonce">Noter l\'annonce</string>
+    <string name="ajouter_une_annonce">Ajouter une Annonce</string>
+    <string name="Add_product">Ajouter une Annonce</string>
+    <string name="My_product">Mes Annonces</string>
+    <string name="mon_profil">Mon Profil</string>
+    <string name="rating">Evaluation</string>
+    <string name="payment">Payer</string>
+    <string name="questionMark">"?"</string>
+    <string name="suggestedPrice">"Prix suggéré:"</string>
+
+
+
+</resources>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <Button
+        android:id="@+id/button_profil"
+        android:layout_width="176dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="50dp"
+        android:background="#2B2B2B"
+        android:onClick="onClick"
+        android:text="@string/profil"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logout" />
+
+    <Button
+        android:id="@+id/button_my_proposals"
+        android:layout_width="181dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:background="#2B2B2B"
+        android:backgroundTint="#646464"
+        android:text="@string/my_proposals"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_my_Product_page" />
+
+    <Button
+        android:id="@+id/button_add_product_page"
+        android:layout_width="182dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/Add_product"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_my_proposals" />
+
+    <Button
+        android:id="@+id/button_my_Product_page"
+        android:layout_width="181dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:background="#2B2B2B"
+        android:onClick="onClickMy_Product_page"
+        android:text="@string/My_product"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_profil" />
+
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="232dp"
+        android:layout_height="71dp"
+        android:layout_marginTop="30dp"
+        android:onClick="onClickLogout"
+        android:text="Déconnexion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/received_propositions"
+        android:layout_width="183dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/received_proposals"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_add_product_page" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProductBasicInformationFragment">
+
+    <TextView
+        android:id="@+id/detailParutionDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/detailGameName"
+        app:layout_constraintTop_toTopOf="@+id/labelDate" />
+
+    <TextView
+        android:id="@+id/labelGameName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/game_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailProductImage" />
+
+    <TextView
+        android:id="@+id/labelPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:text="@string/price"
+        app:layout_constraintStart_toEndOf="@+id/detailGameName"
+        app:layout_constraintTop_toTopOf="@+id/detailParutionDate" />
+
+    <TextView
+        android:id="@+id/labelDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/parution_date"
+        app:layout_constraintEnd_toEndOf="@+id/labelGameName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelGameName" />
+
+    <TextView
+        android:id="@+id/detailGameName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/labelGameName"
+        app:layout_constraintTop_toTopOf="@+id/labelGameName" />
+
+    <TextView
+        android:id="@+id/detailPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/detailProductCategory"
+        app:layout_constraintTop_toTopOf="@+id/labelPrice" />
+
+    <ImageView
+        android:id="@+id/detailProductImage"
+        android:layout_width="235dp"
+        android:layout_height="198dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/labelCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/category"
+        app:layout_constraintEnd_toEndOf="@+id/labelPrice"
+        app:layout_constraintTop_toTopOf="@+id/detailGameName" />
+
+    <TextView
+        android:id="@+id/detailProductCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/labelCategory"
+        app:layout_constraintTop_toTopOf="@+id/labelCategory" />
+
+    <TextView
+        android:id="@+id/currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="@string/currency"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/detailPrice"
+        app:layout_constraintTop_toTopOf="@+id/detailPrice" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

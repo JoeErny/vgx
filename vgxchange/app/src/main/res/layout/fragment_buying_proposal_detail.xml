@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.make_proposition.BuyingProposalDetail">
+
+    <fragment
+        android:id="@+id/fragment_vendor_integration"
+        android:name="com.example.vgxchange.VendorFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_vendor" />
+
+    <fragment
+        android:id="@+id/fragment_product_information_fragment"
+        android:name="com.example.vgxchange.ProductBasicInformationFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_vendor_integration"
+        tools:layout="@layout/fragment_product_basic_information" />
+
+    <Button
+        android:id="@+id/btnGoToRating"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="55dp"
+        android:text="@string/DefaultButtonLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/propCurrency" />
+
+    <TextView
+        android:id="@+id/propPriceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/proposed_price"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/fragment_product_information_fragment"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_product_information_fragment" />
+
+    <TextView
+        android:id="@+id/propPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/price"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/propPriceLabel"
+        app:layout_constraintTop_toTopOf="@+id/propPriceLabel" />
+
+    <TextView
+        android:id="@+id/propCurrency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="@string/currency"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/propPrice"
+        app:layout_constraintTop_toTopOf="@+id/propPrice" />
+
+    <TextView
+        android:id="@+id/propFromDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="@string/from"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/propLabelRental"
+        app:layout_constraintTop_toTopOf="@+id/propLabelRental" />
+
+    <TextView
+        android:id="@+id/propDateStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="@string/date_start"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/propFromDate"
+        app:layout_constraintTop_toTopOf="@+id/propFromDate" />
+
+    <TextView
+        android:id="@+id/propToDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="@string/to"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/propDateStart"
+        app:layout_constraintTop_toTopOf="@+id/propDateStart" />
+
+    <TextView
+        android:id="@+id/propDateEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="@string/date_end"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/propToDate"
+        app:layout_constraintTop_toTopOf="@+id/propToDate" />
+
+    <TextView
+        android:id="@+id/propLabelRental"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/rental_label"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/propPriceLabel"
+        app:layout_constraintTop_toBottomOf="@+id/propPriceLabel" />
+
+    <TextView
+        android:id="@+id/propStateLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/state_label"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/propLabelRental"
+        app:layout_constraintTop_toBottomOf="@+id/propLabelRental" />
+
+    <TextView
+        android:id="@+id/propState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="@string/state"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/propStateLabel"
+        app:layout_constraintTop_toTopOf="@+id/propStateLabel" />
+
+    <Button
+        android:id="@+id/accept_proposal"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="50dp"
+        android:text="@string/accept_proposal"
+        app:layout_constraintStart_toStartOf="@+id/btnGoToRating"
+        app:layout_constraintTop_toBottomOf="@+id/propStateLabel" />
+
+    <Button
+        android:id="@+id/decline_proposal"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="5dp"
+        android:text="@string/decline_proposal"
+        app:layout_constraintStart_toEndOf="@+id/accept_proposal"
+        app:layout_constraintTop_toTopOf="@+id/accept_proposal" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

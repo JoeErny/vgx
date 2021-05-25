@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.make_proposition.RentalProposalFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <fragment
+        android:id="@+id/fragment_vendor_integration"
+        android:name="com.example.vgxchange.VendorFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_vendor" />
+
+
+    <fragment
+        android:id="@+id/fragment_product_information_fragment"
+        android:name="com.example.vgxchange.ProductBasicInformationFragment"
+        android:layout_width="414dp"
+        android:layout_height="316dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_vendor_integration"
+        tools:layout="@layout/fragment_product_basic_information" />
+
+    <EditText
+        android:id="@+id/txtProposedPrice"
+        android:layout_width="142dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="80dp"
+        android:ems="10"
+        android:hint="@string/proposed_price"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnGoToRating"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datePickerStart" />
+
+    <Button
+        android:id="@+id/btnGoToRating"
+        android:layout_width="236dp"
+        android:layout_height="57dp"
+        android:layout_marginBottom="80dp"
+        android:text="@string/send_proposition"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <DatePicker
+        android:id="@+id/datePickerEnd"
+        android:layout_width="347dp"
+        android:layout_height="76dp"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:tooltipText="@string/to"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_product_information_fragment" />
+
+    <DatePicker
+        android:id="@+id/datePickerStart"
+        android:layout_width="346dp"
+        android:layout_height="71dp"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:tooltipText="@string/from"
+        app:layout_constraintBottom_toTopOf="@+id/btnGoToRating"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datePickerEnd" />
+
+    <TextView
+        android:id="@+id/from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/from"
+        app:layout_constraintBottom_toBottomOf="@+id/datePickerEnd"
+        app:layout_constraintEnd_toStartOf="@+id/datePickerEnd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/datePickerEnd" />
+
+    <TextView
+        android:id="@+id/to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/to"
+        app:layout_constraintBottom_toBottomOf="@+id/datePickerStart"
+        app:layout_constraintEnd_toStartOf="@+id/datePickerStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/datePickerStart" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

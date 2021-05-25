@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/myBuyingProposalRow"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    tools:context="fragments.make_proposition.BuyingPropositionRecyclerViewAdapter">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewProposal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentPadding="5dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/buyProductImage"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/ic_launcher"
+
+                />
+
+            <TextView
+                android:id="@+id/buyProductName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Name"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/buyProductImage"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/buyProductDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Description"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/buyProductName"
+                app:layout_constraintTop_toBottomOf="@+id/buyProductName" />
+
+
+            <TextView
+                android:id="@+id/buyPropositionState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/proposition_state"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/buyProductName" />
+
+            <TextView
+                android:id="@+id/buyProposedPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="3dp"
+
+                android:text="Price"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/currencyProposedPrice"
+                app:layout_constraintTop_toBottomOf="@+id/buyPropositionState" />
+
+            <TextView
+                android:id="@+id/currencyProposedPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/currency"
+                app:layout_constraintEnd_toEndOf="@+id/buyPropositionState"
+                app:layout_constraintTop_toTopOf="@+id/buyProposedPrice" />
+
+            <TextView
+                android:id="@+id/buyAnnouncerLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/pseudo"
+
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/buyProductDescription"
+                app:layout_constraintTop_toBottomOf="@+id/buyProductDescription" />
+
+            <TextView
+                android:id="@+id/buyPropositionDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Date"
+                app:layout_constraintEnd_toEndOf="@+id/currencyProposedPrice"
+                app:layout_constraintTop_toBottomOf="@+id/buyProposedPrice" />
+
+            <TextView
+                android:id="@+id/propFromDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/from"
+                app:layout_constraintStart_toStartOf="@+id/buyAnnouncerLogin"
+                app:layout_constraintTop_toBottomOf="@+id/buyAnnouncerLogin" />
+
+            <TextView
+                android:id="@+id/propDateStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/date_start"
+                app:layout_constraintStart_toEndOf="@+id/propFromDate"
+                app:layout_constraintTop_toTopOf="@+id/propFromDate" />
+
+            <TextView
+                android:id="@+id/propToDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/to"
+                app:layout_constraintStart_toEndOf="@+id/propDateStart"
+                app:layout_constraintTop_toTopOf="@+id/propDateStart" />
+
+            <TextView
+                android:id="@+id/propDateEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/date_end"
+                app:layout_constraintStart_toEndOf="@+id/propToDate"
+                app:layout_constraintTop_toTopOf="@+id/propToDate" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

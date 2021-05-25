@@ -1,0 +1,70 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".fragments.adding_product_announce.AddProductFragment"
+    tools:ignore="ExtraText">
+
+
+    <EditText
+        android:id="@+id/editText_add_product_game"
+        android:layout_width="277dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="56dp"
+        android:ems="10"
+        android:hint="Description"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_add_product_photoLink"
+        android:layout_width="277dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="Lien Photo"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumber_price_add_product" />
+
+    <Spinner
+        android:id="@+id/spinnerGame"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:textColor="#777777"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_add_product_photoLink" />
+
+    <EditText
+        android:id="@+id/editTextNumber_price_add_product"
+        android:layout_width="277dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="Prix"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_add_product_game" />
+
+    <Button
+        android:id="@+id/button_add_product"
+        android:layout_width="349dp"
+        android:layout_height="66dp"
+        android:text="Poster"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerGame" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
