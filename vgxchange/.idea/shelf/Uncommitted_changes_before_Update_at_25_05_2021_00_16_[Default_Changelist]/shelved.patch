@@ -1,0 +1,309 @@
+Index: app/src/main/java/com/example/vgxchange/PaymentFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.vgxchange;\r\n\r\nimport android.os.Bundle;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\nimport androidx.fragment.app.Fragment;\r\n\r\npublic class PaymentFragment extends Fragment {\r\n\r\n\r\n    public PaymentFragment() {\r\n        // Required empty public constructor\r\n    }\r\n\r\n    public static PaymentFragment newInstance(String param1, String param2) {\r\n        PaymentFragment fragment = new PaymentFragment();\r\n        Bundle args = new Bundle();\r\n        fragment.setArguments(args);\r\n        return fragment;\r\n    }\r\n\r\n    @Override\r\n    public void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        if (getArguments() != null) {\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n\r\n        return inflater.inflate(R.layout.fragment_payment, container, false);\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/vgxchange/PaymentFragment.java	(revision c90ff58dbc53f905b0b48dc92b02e79ce5dc437d)
++++ app/src/main/java/com/example/vgxchange/PaymentFragment.java	(date 1621894592263)
+@@ -1,14 +1,38 @@
+ package com.example.vgxchange;
+ 
++import android.content.SharedPreferences;
+ import android.os.Bundle;
++import android.util.Log;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
++import android.widget.Button;
++import android.widget.TextView;
++import android.widget.Toast;
+ 
+ import androidx.fragment.app.Fragment;
++import androidx.navigation.Navigation;
++
++import com.example.vgxchange.api.controllers.PaymentApi;
++import com.example.vgxchange.api.controllers.PropositionApi;
++import com.example.vgxchange.api.dto.BuyingPropositionToCreate;
++import com.example.vgxchange.api.dto.PaymentToCreate;
++import com.example.vgxchange.model.BuyingProp;
++import com.example.vgxchange.model.Payment;
++import com.example.vgxchange.network.ApiRetrofit;
++import com.example.vgxchange.tool.PaymentState;
++
++import retrofit2.Call;
++import retrofit2.Callback;
++import retrofit2.Response;
++import retrofit2.Retrofit;
+ 
+ public class PaymentFragment extends Fragment {
+ 
++    BuyingProp proposalToShow;
++    Button payButton;
++    TextView paymentAmount;
++    Payment paymentResult;
+ 
+     public PaymentFragment() {
+         // Required empty public constructor
+@@ -31,8 +55,55 @@
+     @Override
+     public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState) {
++        View view = inflater.inflate(R.layout.fragment_payment, container, false);
++        if (getArguments() != null) {
++            proposalToShow = (BuyingProp) getArguments().getSerializable(Constants.selectedBuyingProposalBundleKey);
++        }
++        payButton = view.findViewById(R.id.btn_payment);
++        paymentAmount = view.findViewById(R.id.paymentAmount);
++        paymentAmount.setText(Double.toString(proposalToShow.proposedAmount));
++        payButton = view.findViewById(R.id.paymentAmount);
++        if (proposalToShow != null) {
++            payButton.setOnClickListener(v -> {
++                Toast.makeText(getContext(), "Paiement en cours ..." + proposalToShow.proposedAmount, Toast.LENGTH_SHORT).show();
++                SharedPreferences sharedPrefReturn = getActivity().getPreferences(getContext().MODE_PRIVATE);
++                String userId = sharedPrefReturn.getString("userId", "defaultId");
++                PaymentToCreate paymentToCreate = new PaymentToCreate(proposalToShow.id, userId, proposalToShow.proposedAmount);
++                Retrofit retrofit = ApiRetrofit.getClient();
++                PaymentApi paymentApi = retrofit.create(PaymentApi.class);
++                Call<Payment> call = paymentApi.add(paymentToCreate);
++                call.enqueue(new Callback<Payment>() {
++                    @Override
++                    public void onResponse(Call<Payment> call, Response<Payment> response) {
++                        if (response.isSuccessful()) {
++                            if (response.body() != null) {
++                                paymentResult = response.body();
++                                if (paymentResult.Status == PaymentState.completed.ordinal()) {
++                                    Toast.makeText(getContext(), "Paiement effectué !", Toast.LENGTH_SHORT).show();
++                                    Navigation.findNavController(v).navigate(R.id.action_buyingProposal_to_usersPropositionsFragment);
++                                } else if (paymentResult.Status == PaymentState.failure.ordinal()) {
++                                    Toast.makeText(getContext(), "Echec du paiement, renouvelez le paiement", Toast.LENGTH_SHORT).show();
++                                } else {
++                                    Toast.makeText(getContext(), "Echec du paiement, erreur serveur", Toast.LENGTH_SHORT).show();
++                                }
++                            } else {
++                                Toast toast = Toast.makeText(getContext(), "Echec du paiement, erreur serveur", Toast.LENGTH_SHORT);
++                            }
++                        }
++                    }
++                    @Override
++                    public void onFailure(Call<Payment> call, Throwable t) {
++                        Log.d("ReponseFail", t.getMessage());
++                        Toast toast = Toast.makeText(getContext(), "Erreur serveur", Toast.LENGTH_SHORT);
++                        toast.show();
++                    }
++                });
++
++            });
++        }
+ 
+-        return inflater.inflate(R.layout.fragment_payment, container, false);
++
++        return view;
+ 
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/vgxchange/fragments/rating/RatingFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.vgxchange.fragments.rating;\r\n\r\nimport android.content.Context;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.RatingBar;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.navigation.Navigation;\r\n\r\nimport com.example.vgxchange.Constants;\r\nimport com.example.vgxchange.R;\r\nimport com.example.vgxchange.api.controllers.RatingApi;\r\nimport com.example.vgxchange.api.dto.Evaluation;\r\nimport com.example.vgxchange.model.BuyingProp;\r\nimport com.example.vgxchange.network.ApiRetrofit;\r\n\r\nimport retrofit2.Call;\r\nimport retrofit2.Callback;\r\nimport retrofit2.Response;\r\nimport retrofit2.Retrofit;\r\n\r\n/**\r\n * A simple {@link Fragment} subclass.\r\n * Use the {@link RatingFragment#newInstance} factory method to\r\n * create an instance of this fragment.\r\n */\r\npublic class RatingFragment extends Fragment {\r\n    BuyingProp proposalToShow;\r\n\r\n    // TODO: Rename parameter arguments, choose names that match\r\n    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER\r\n    private static final String ARG_PARAM1 = \"param1\";\r\n    private static final String ARG_PARAM2 = \"param2\";\r\n\r\n    // TODO: Rename and change types of parameters\r\n    private String mParam1;\r\n    private String mParam2;\r\n    SharedPreferences sharedPrefReturn;\r\n    String idRatingProduct ;\r\n    String idRatingUser ;\r\n    RatingBar rating ;\r\n    EditText comment;\r\n\r\n    public RatingFragment() {\r\n        // Required empty public constructor\r\n    }\r\n\r\n    /**\r\n     * Use this factory method to create a new instance of\r\n     * this fragment using the provided parameters.\r\n     *\r\n     * @param param1 Parameter 1.\r\n     * @param param2 Parameter 2.\r\n     * @return A new instance of fragment RatingFragment.\r\n     */\r\n    // TODO: Rename and change types and number of parameters\r\n    public static RatingFragment newInstance(String param1, String param2) {\r\n        RatingFragment fragment = new RatingFragment();\r\n        Bundle args = new Bundle();\r\n        args.putString(ARG_PARAM1, param1);\r\n        args.putString(ARG_PARAM2, param2);\r\n        fragment.setArguments(args);\r\n        return fragment;\r\n    }\r\n\r\n    @Override\r\n    public void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        if (getArguments() != null) {\r\n            mParam1 = getArguments().getString(ARG_PARAM1);\r\n            mParam2 = getArguments().getString(ARG_PARAM2);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n        // Inflate the layout for this fragment\r\n        View view = inflater.inflate(R.layout.fragment_rating, container, false);\r\n        sharedPrefReturn = getActivity().getPreferences(Context.MODE_PRIVATE);\r\n\r\n        rating = view.findViewById(R.id.ratingBar);\r\n        comment = view.findViewById(R.id.editTextCommentRating);\r\n        rating.setRating(1);\r\n\r\n        Button btn = view.findViewById(R.id.buttonRating);\r\n        btn.setOnClickListener(v -> { onClickRate(view); });\r\n\r\n        if (getArguments() != null)\r\n        {\r\n            proposalToShow = (BuyingProp) getArguments().getSerializable(Constants.selectedBuyingProposalBundleKey);\r\n        }\r\n        return view;\r\n    }\r\n\r\n    private void onClickRate(View view) {\r\n\r\n        idRatingProduct = proposalToShow.id;\r\n        idRatingUser = sharedPrefReturn.getString(\"userId\", \"error id\");\r\n\r\n        Retrofit retrofit = ApiRetrofit.getClient();\r\n        RatingApi ratingApi = retrofit.create(RatingApi.class);\r\n        if (String.valueOf(comment.getText()).matches(\"\")) {\r\n            Toast.makeText(getContext(), \"Veuillez remplir tout les champs !\", Toast.LENGTH_SHORT).show();\r\n            return;\r\n\r\n        } else {\r\n\r\n            Evaluation ratingToAdd = new Evaluation(idRatingUser, idRatingProduct, rating.getNumStars(), String.valueOf(comment.getText()));\r\n            Call<Evaluation> call = ratingApi.postRating(ratingToAdd);\r\n\r\n            call.enqueue(new Callback<Evaluation>() {\r\n                @Override\r\n                public void onResponse(Call<Evaluation> call, Response<Evaluation> response) {\r\n                    Log.d(\"Reponse\", String.valueOf(response.code()));\r\n\r\n                    if(response.body() != null)\r\n                    {\r\n                        Toast toast = Toast.makeText(getContext(), \"Evaluation Envoyé\", Toast.LENGTH_SHORT);\r\n                        toast.show();\r\n                        Navigation.findNavController(view).navigate(R.id.action_ratingFragment_to_usersPropositionsFragment);\r\n\r\n                    }\r\n                    else\r\n                    {\r\n                        Toast toast = Toast.makeText(getContext(), \"Echec de l'envoi\", Toast.LENGTH_SHORT);\r\n                        toast.show();\r\n                    }\r\n                }\r\n                @Override\r\n                public void onFailure(Call<Evaluation> call, Throwable t) {\r\n                    Log.d(\"Reponse\", t.getMessage());\r\n                    Toast toast = Toast.makeText(getContext(), \"Erreur Serveur\", Toast.LENGTH_SHORT);\r\n                    toast.show();\r\n                }\r\n            });\r\n        }\r\n    };\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/vgxchange/fragments/rating/RatingFragment.java	(revision c90ff58dbc53f905b0b48dc92b02e79ce5dc437d)
++++ app/src/main/java/com/example/vgxchange/fragments/rating/RatingFragment.java	(date 1621886907013)
+@@ -27,22 +27,9 @@
+ import retrofit2.Response;
+ import retrofit2.Retrofit;
+ 
+-/**
+- * A simple {@link Fragment} subclass.
+- * Use the {@link RatingFragment#newInstance} factory method to
+- * create an instance of this fragment.
+- */
+ public class RatingFragment extends Fragment {
+     BuyingProp proposalToShow;
+ 
+-    // TODO: Rename parameter arguments, choose names that match
+-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+-    private static final String ARG_PARAM1 = "param1";
+-    private static final String ARG_PARAM2 = "param2";
+-
+-    // TODO: Rename and change types of parameters
+-    private String mParam1;
+-    private String mParam2;
+     SharedPreferences sharedPrefReturn;
+     String idRatingProduct ;
+     String idRatingUser ;
+@@ -53,20 +40,9 @@
+         // Required empty public constructor
+     }
+ 
+-    /**
+-     * Use this factory method to create a new instance of
+-     * this fragment using the provided parameters.
+-     *
+-     * @param param1 Parameter 1.
+-     * @param param2 Parameter 2.
+-     * @return A new instance of fragment RatingFragment.
+-     */
+-    // TODO: Rename and change types and number of parameters
+     public static RatingFragment newInstance(String param1, String param2) {
+         RatingFragment fragment = new RatingFragment();
+         Bundle args = new Bundle();
+-        args.putString(ARG_PARAM1, param1);
+-        args.putString(ARG_PARAM2, param2);
+         fragment.setArguments(args);
+         return fragment;
+     }
+@@ -75,8 +51,6 @@
+     public void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         if (getArguments() != null) {
+-            mParam1 = getArguments().getString(ARG_PARAM1);
+-            mParam2 = getArguments().getString(ARG_PARAM2);
+         }
+     }
+ 
+Index: app/src/main/java/com/example/vgxchange/api/controllers/PaymentApi.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/vgxchange/api/controllers/PaymentApi.java	(date 1621894104221)
++++ app/src/main/java/com/example/vgxchange/api/controllers/PaymentApi.java	(date 1621894104221)
+@@ -0,0 +1,16 @@
++package com.example.vgxchange.api.controllers;
++
++import com.example.vgxchange.api.dto.BuyingPropositionToCreate;
++import com.example.vgxchange.api.dto.PaymentToCreate;
++import com.example.vgxchange.model.BuyingProp;
++import com.example.vgxchange.model.Payment;
++
++import retrofit2.Call;
++import retrofit2.http.Body;
++import retrofit2.http.POST;
++
++public interface PaymentApi {
++
++    @POST("/api/payment")
++    Call<Payment> add(@Body PaymentToCreate paymentToCreate);
++}
+Index: app/src/main/java/com/example/vgxchange/model/Payment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/vgxchange/model/Payment.java	(date 1621894067092)
++++ app/src/main/java/com/example/vgxchange/model/Payment.java	(date 1621894067092)
+@@ -0,0 +1,74 @@
++package com.example.vgxchange.model;
++
++import com.example.vgxchange.tool.PaymentState;
++
++import java.io.Serializable;
++
++public class Payment implements Serializable {
++    public String Id;
++    public double Amount;
++    public String CreationDate;
++    public int Status;
++    public User User;
++    public BuyingProp Proposal;
++
++    public Payment(String id, double amount, String creationDate, int status, com.example.vgxchange.model.User user, BuyingProp proposal) {
++        Id = id;
++        Amount = amount;
++        CreationDate = creationDate;
++        Status = status;
++        User = user;
++        Proposal = proposal;
++    }
++
++    public Payment() {
++    }
++
++    public String getId() {
++        return Id;
++    }
++
++    public void setId(String id) {
++        Id = id;
++    }
++
++    public double getAmount() {
++        return Amount;
++    }
++
++    public void setAmount(double amount) {
++        Amount = amount;
++    }
++
++    public String getCreationDate() {
++        return CreationDate;
++    }
++
++    public void setCreationDate(String creationDate) {
++        CreationDate = creationDate;
++    }
++
++    public int getStatus() {
++        return Status;
++    }
++
++    public void setStatus(int status) {
++        Status = status;
++    }
++
++    public com.example.vgxchange.model.User getUser() {
++        return User;
++    }
++
++    public void setUser(com.example.vgxchange.model.User user) {
++        User = user;
++    }
++
++    public BuyingProp getProposal() {
++        return Proposal;
++    }
++
++    public void setProposal(BuyingProp proposal) {
++        Proposal = proposal;
++    }
++}
+Index: app/src/main/java/com/example/vgxchange/api/dto/PaymentToCreate.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/vgxchange/api/dto/PaymentToCreate.java	(date 1621893667631)
++++ app/src/main/java/com/example/vgxchange/api/dto/PaymentToCreate.java	(date 1621893667631)
+@@ -0,0 +1,13 @@
++package com.example.vgxchange.api.dto;
++
++public class PaymentToCreate {
++    public String ProposalId;
++    public String UserId;
++    public double Amount;
++
++    public PaymentToCreate(String proposalId, String userId, double amount) {
++        ProposalId = proposalId;
++        UserId = userId;
++        Amount = amount;
++    }
++}
+Index: app/src/main/java/com/example/vgxchange/tool/PaymentState.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/vgxchange/tool/PaymentState.java	(date 1621892560542)
++++ app/src/main/java/com/example/vgxchange/tool/PaymentState.java	(date 1621892560542)
+@@ -0,0 +1,6 @@
++package com.example.vgxchange.tool;
++
++public enum PaymentState {
++    failure,
++    completed
++}

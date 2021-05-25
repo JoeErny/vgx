@@ -1,0 +1,364 @@
+Index: app/src/main/java/com/example/vgxchange/fragments/make_proposition/BuyingPropositionRecyclerViewAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.vgxchange.fragments.make_proposition;\r\n\r\nimport android.content.Context;\r\nimport android.graphics.Color;\r\nimport android.graphics.drawable.Drawable;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.cardview.widget.CardView;\r\nimport androidx.navigation.Navigation;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.example.vgxchange.Constants;\r\nimport com.example.vgxchange.R;\r\nimport com.example.vgxchange.model.BuyingProp;\r\nimport com.example.vgxchange.model.ProductAnnounce;\r\nimport com.example.vgxchange.tool.DateTool;\r\nimport com.example.vgxchange.tool.PropositionState;\r\nimport com.example.vgxchange.tool.PropositionType;\r\n\r\nimport java.io.InputStream;\r\nimport java.net.URL;\r\nimport java.util.ArrayList;\r\nimport java.util.Date;\r\nimport java.util.List;\r\n\r\npublic class BuyingPropositionRecyclerViewAdapter extends RecyclerView.Adapter<BuyingPropositionRecyclerViewAdapter.BuyingPropositionViewHolder> {\r\n\r\n\r\n    List<BuyingProp> buyingPropositions = new ArrayList<>();\r\n    Context context;\r\n    TextView productGameName, description, proposedPrice, announcerLogin, propositionState, parutionDate, from, to, dateStart, dateEnd;\r\n    ImageView productImage;\r\n    CardView cardViewProposal;\r\n\r\n    public BuyingPropositionRecyclerViewAdapter(Context context, List<BuyingProp> buyingPropositions) {\r\n        this.buyingPropositions = buyingPropositions;\r\n        this.context = context;\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull BuyingPropositionViewHolder holder, int position) {\r\n        BuyingProp prop = buyingPropositions.get(position);\r\n        holder.bind(prop);\r\n        holder.itemView.setOnClickListener(v -> {\r\n            //Transmettre le produit en bundle\r\n            Bundle selectedPropositionBundle = new Bundle();\r\n            selectedPropositionBundle.putSerializable(Constants.selectedBuyingProposalBundleKey, prop);\r\n            Navigation.findNavController(v).navigate(R.id.action_usersPropositionsFragment_to_buyingProposalDetail, selectedPropositionBundle);\r\n        });\r\n\r\n    }\r\n\r\n\r\n    @NonNull\r\n    @Override\r\n    public BuyingPropositionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        LayoutInflater inflater = LayoutInflater.from(context);\r\n        View view = inflater.inflate(R.layout.my_buying_proposal_row, parent, false);\r\n        return new BuyingPropositionRecyclerViewAdapter.BuyingPropositionViewHolder(view);\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return buyingPropositions.size();\r\n    }\r\n\r\n    public class BuyingPropositionViewHolder extends RecyclerView.ViewHolder {\r\n\r\n\r\n        public BuyingPropositionViewHolder(@NonNull View itemView) {\r\n            super(itemView);\r\n            productImage = itemView.findViewById(R.id.buyProductImage);\r\n            productGameName = itemView.findViewById(R.id.buyProductName);\r\n            proposedPrice = itemView.findViewById(R.id.buyProposedPrice);\r\n            description = itemView.findViewById(R.id.buyProductDescription);\r\n            announcerLogin = itemView.findViewById(R.id.buyAnnouncerLogin);\r\n            parutionDate = itemView.findViewById(R.id.buyPropositionDate);\r\n            propositionState = itemView.findViewById(R.id.buyPropositionState);\r\n            dateStart = itemView.findViewById(R.id.dateStart);\r\n            dateEnd = itemView.findViewById(R.id.dateEnd);\r\n            from = itemView.findViewById(R.id.fromDate);\r\n            to = itemView.findViewById(R.id.toDate);\r\n            cardViewProposal = itemView.findViewById(R.id.cardViewProposal);\r\n        }\r\n\r\n\r\n        public void bind(BuyingProp proposition) {\r\n            productGameName.setText(proposition.productAnnounce.getGame().getName());\r\n            announcerLogin.setText(proposition.productAnnounce.announcer.getLogin());\r\n            parutionDate.setText(DateTool.formatStringDateDDMMYY(proposition.dateSubmission));\r\n            setProductImage(proposition.getProductAnnounce().getPhotoLink());\r\n            proposedPrice.setText(String.valueOf(proposition.getProposedAmount()));\r\n            propositionState.setText(PropositionState.values()[proposition.propositionState].getDisplayValue());\r\n\r\n            try {\r\n                propositionState.setBackgroundColor(Color.parseColor(PropositionState.values()[proposition.propositionState].getColorString()));\r\n            } catch (Exception e) {\r\n                Log.d(\"PARSE COLOR ERROR\", e.getMessage());\r\n            }\r\n\r\n            if (proposition.propositionType == PropositionType.RENTAL.ordinal()) {\r\n                dateStart.setText(DateTool.formatStringDateDDMMYY(proposition.getRentalStart()));\r\n                dateEnd.setText(DateTool.formatStringDateDDMMYY(proposition.getRentalEnd()));\r\n\r\n            } else {\r\n                from.setVisibility(View.GONE);\r\n                to.setVisibility(View.GONE);\r\n                dateStart.setVisibility(View.GONE);\r\n                dateEnd.setVisibility(View.GONE);\r\n            }\r\n\r\n\r\n        }\r\n\r\n        public void setProductImage(String url) {\r\n            Thread thread = new Thread(new Runnable() {\r\n                @Override\r\n                public void run() {\r\n                    try {\r\n                        InputStream is = (InputStream) new URL(url).getContent();\r\n                        Drawable d = Drawable.createFromStream(is, url);\r\n                        productImage.setImageDrawable(d);\r\n                    } catch (Exception e) {\r\n                        e.printStackTrace();\r\n                    }\r\n                }\r\n            });\r\n            thread.start();\r\n            try {\r\n                thread.join();\r\n            } catch (InterruptedException e) {\r\n                e.printStackTrace();\r\n            }\r\n        }\r\n\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/vgxchange/fragments/make_proposition/BuyingPropositionRecyclerViewAdapter.java	(revision 23756e291ee10634aaea8601eb0aac7a299f159d)
++++ app/src/main/java/com/example/vgxchange/fragments/make_proposition/BuyingPropositionRecyclerViewAdapter.java	(date 1621882780485)
+@@ -19,7 +19,6 @@
+ import com.example.vgxchange.Constants;
+ import com.example.vgxchange.R;
+ import com.example.vgxchange.model.BuyingProp;
+-import com.example.vgxchange.model.ProductAnnounce;
+ import com.example.vgxchange.tool.DateTool;
+ import com.example.vgxchange.tool.PropositionState;
+ import com.example.vgxchange.tool.PropositionType;
+@@ -27,7 +26,6 @@
+ import java.io.InputStream;
+ import java.net.URL;
+ import java.util.ArrayList;
+-import java.util.Date;
+ import java.util.List;
+ 
+ public class BuyingPropositionRecyclerViewAdapter extends RecyclerView.Adapter<BuyingPropositionRecyclerViewAdapter.BuyingPropositionViewHolder> {
+@@ -83,10 +81,10 @@
+             announcerLogin = itemView.findViewById(R.id.buyAnnouncerLogin);
+             parutionDate = itemView.findViewById(R.id.buyPropositionDate);
+             propositionState = itemView.findViewById(R.id.buyPropositionState);
+-            dateStart = itemView.findViewById(R.id.dateStart);
+-            dateEnd = itemView.findViewById(R.id.dateEnd);
+-            from = itemView.findViewById(R.id.fromDate);
+-            to = itemView.findViewById(R.id.toDate);
++            dateStart = itemView.findViewById(R.id.propDateStart);
++            dateEnd = itemView.findViewById(R.id.propDateEnd);
++            from = itemView.findViewById(R.id.propFromDate);
++            to = itemView.findViewById(R.id.propToDate);
+             cardViewProposal = itemView.findViewById(R.id.cardViewProposal);
+         }
+ 
+Index: app/src/main/java/com/example/vgxchange/fragments/make_proposition/BuyingProposalDetail.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.vgxchange.fragments.make_proposition;\r\n\r\nimport android.graphics.drawable.Drawable;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Button;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.navigation.Navigation;\r\n\r\nimport com.example.vgxchange.Constants;\r\nimport com.example.vgxchange.R;\r\nimport com.example.vgxchange.model.BuyingProp;\r\nimport com.example.vgxchange.model.ProductAnnounce;\r\nimport com.example.vgxchange.tool.DateTool;\r\n\r\nimport java.io.InputStream;\r\nimport java.net.URL;\r\n\r\n\r\npublic class BuyingProposalDetail extends Fragment {\r\n\r\n    BuyingProp proposalToShow;\r\n    ProductAnnounce productToShow;\r\n    TextView name, description, price, announcerName, category, parutionDate, announcerMail, announcerPseudo, proposedPrice;\r\n    ImageView productImage;\r\n    Button btnGoToRating;\r\n\r\n\r\n    public BuyingProposalDetail() {\r\n    }\r\n\r\n    public static BuyingProposalDetail newInstance() {\r\n        BuyingProposalDetail fragment = new BuyingProposalDetail();\r\n        Bundle args = new Bundle();\r\n        fragment.setArguments(args);\r\n        return fragment;\r\n    }\r\n\r\n    @Override\r\n    public void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        if (getArguments() != null) {\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n        View view = inflater.inflate(R.layout.fragment_buying_proposal_detail, container, false);\r\n        if (getArguments() != null) {\r\n            proposalToShow = (BuyingProp) getArguments().getSerializable(Constants.selectedBuyingProposalBundleKey);\r\n            view = mapWithFields(view, proposalToShow);\r\n            btnGoToRating = view.findViewById(R.id.btnGoToRating);\r\n\r\n            //ICI MARTIN POUR ALLER VERS LA PAGE RATING, il suffit de changer le ACTION\r\n            btnGoToRating.setOnClickListener(v -> {\r\n                Bundle selectedPropositionBundle = new Bundle();\r\n                selectedPropositionBundle.putSerializable(Constants.selectedBuyingProposalBundleKey, proposalToShow);\r\n                Navigation.findNavController(v).navigate(R.id.action_buyingProposalDetail_to_ratingFragment, selectedPropositionBundle);\r\n            //action_buyingProposalDetail_to_homeFragment, à changer en ...to_rating\r\n            });\r\n            //      CI-DESSOUS : A METTRE DANS onCreate de ton EVALUATION FRAGMENT, POUR RECUPERER LE BUNDLE\r\n//            if (getArguments() != null) {\r\n//                proposalToShow = (BuyingProp) getArguments().getSerializable(Constants.selectedBuyingProposalBundleKey);\r\n//            }\r\n\r\n        } else {\r\n            Toast.makeText(getContext(), \"Erreur de chargement des informations\", Toast.LENGTH_SHORT).show();\r\n        }\r\n\r\n        return view;\r\n    }\r\n\r\n\r\n    public View mapWithFields(View v, BuyingProp buyingProp) {\r\n        if (buyingProp != null) {\r\n            name = v.findViewById(R.id.detailGameName);\r\n            announcerName = v.findViewById(R.id.person_name);\r\n            announcerMail = v.findViewById(R.id.person_email);\r\n            announcerPseudo = v.findViewById(R.id.person_login);\r\n            parutionDate = v.findViewById(R.id.detailParutionDate);\r\n            price = v.findViewById(R.id.detailPrice);\r\n            category = v.findViewById(R.id.detailProductCategory);\r\n            proposedPrice = v.findViewById(R.id.propPrice);\r\n\r\n            name.setText(buyingProp.productAnnounce.game.getName());\r\n            announcerName.setText(buyingProp.productAnnounce.announcer.getName());\r\n            announcerMail.setText(buyingProp.productAnnounce.announcer.getMail());\r\n            announcerPseudo.setText(buyingProp.productAnnounce.announcer.getLogin());\r\n            price.setText(Double.toString(buyingProp.productAnnounce.getPrice()));\r\n            category.setText(buyingProp.productAnnounce.getGame().getCategory().getLabel());\r\n            parutionDate.setText(DateTool.formatStringDateDDMMYY(buyingProp.productAnnounce.getParution()));\r\n            proposedPrice.setText(Double.toString(buyingProp.getProposedAmount()));\r\n            v = setProductImage(v, buyingProp.productAnnounce.getPhotoLink());\r\n            Log.d(\"PROPOSAL TO SHOW\", proposalToShow.productAnnounce.game.getName());\r\n            Toast.makeText(getContext(), proposalToShow.productAnnounce.game.getName(), Toast.LENGTH_SHORT).show();\r\n        }\r\n\r\n        return v;\r\n    }\r\n\r\n    public View setProductImage(View v, String url) {\r\n        productImage = v.findViewById(R.id.detailProductImage);\r\n        Thread thread = new Thread(new Runnable() {\r\n            @Override\r\n            public void run() {\r\n                try {\r\n                    InputStream is = (InputStream) new URL(url).getContent();\r\n                    Drawable d = Drawable.createFromStream(is, url);\r\n                    productImage.setImageDrawable(d);\r\n                } catch (Exception e) {\r\n                    e.printStackTrace();\r\n                }\r\n            }\r\n        });\r\n        thread.start();\r\n        try {\r\n            thread.join();\r\n        } catch (InterruptedException e) {\r\n            e.printStackTrace();\r\n        }\r\n\r\n        return v;\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/vgxchange/fragments/make_proposition/BuyingProposalDetail.java	(revision 23756e291ee10634aaea8601eb0aac7a299f159d)
++++ app/src/main/java/com/example/vgxchange/fragments/make_proposition/BuyingProposalDetail.java	(date 1621885580771)
+@@ -1,5 +1,6 @@
+ package com.example.vgxchange.fragments.make_proposition;
+ 
++import android.graphics.Color;
+ import android.graphics.drawable.Drawable;
+ import android.os.Bundle;
+ import android.util.Log;
+@@ -11,6 +12,7 @@
+ import android.widget.TextView;
+ import android.widget.Toast;
+ 
++import androidx.constraintlayout.widget.ConstraintLayout;
+ import androidx.fragment.app.Fragment;
+ import androidx.navigation.Navigation;
+ 
+@@ -19,6 +21,8 @@
+ import com.example.vgxchange.model.BuyingProp;
+ import com.example.vgxchange.model.ProductAnnounce;
+ import com.example.vgxchange.tool.DateTool;
++import com.example.vgxchange.tool.PropositionState;
++import com.example.vgxchange.tool.PropositionType;
+ 
+ import java.io.InputStream;
+ import java.net.URL;
+@@ -28,7 +32,10 @@
+ 
+     BuyingProp proposalToShow;
+     ProductAnnounce productToShow;
+-    TextView name, description, price, announcerName, category, parutionDate, announcerMail, announcerPseudo, proposedPrice;
++    TextView name, description, price, announcerName, category, parutionDate,
++            announcerMail, announcerPseudo, proposedPrice, propDateStart,
++            propDateEnd, propFrom, propTo, propRentalLabel,
++            propState;
+     ImageView productImage;
+     Button btnGoToRating;
+ 
+@@ -59,17 +66,31 @@
+             view = mapWithFields(view, proposalToShow);
+             btnGoToRating = view.findViewById(R.id.btnGoToRating);
+ 
+-            //ICI MARTIN POUR ALLER VERS LA PAGE RATING, il suffit de changer le ACTION
+-            btnGoToRating.setOnClickListener(v -> {
+-                Bundle selectedPropositionBundle = new Bundle();
+-                selectedPropositionBundle.putSerializable(Constants.selectedBuyingProposalBundleKey, proposalToShow);
+-                Navigation.findNavController(v).navigate(R.id.action_buyingProposalDetail_to_ratingFragment, selectedPropositionBundle);
+-            //action_buyingProposalDetail_to_homeFragment, à changer en ...to_rating
+-            });
+-            //      CI-DESSOUS : A METTRE DANS onCreate de ton EVALUATION FRAGMENT, POUR RECUPERER LE BUNDLE
+-//            if (getArguments() != null) {
+-//                proposalToShow = (BuyingProp) getArguments().getSerializable(Constants.selectedBuyingProposalBundleKey);
+-//            }
++
++            if (proposalToShow.propositionState == PropositionState.WAITING.ordinal()) {
++                btnGoToRating.setVisibility(View.GONE);
++
++            } else if (proposalToShow.propositionState == PropositionState.ACCEPTED.ordinal()) {
++                btnGoToRating.setText("Procéder au paiement");
++                btnGoToRating.setOnClickListener(v -> {
++                    Bundle selectedPropositionBundle = new Bundle();
++                    selectedPropositionBundle.putSerializable(Constants.selectedBuyingProposalBundleKey, proposalToShow);
++                    Navigation.findNavController(v).navigate(R.id.action_buyingProposalDetail_to_ratingFragment, selectedPropositionBundle);
++                });
++
++            } else if (proposalToShow.propositionState == PropositionState.DECLINED.ordinal()) {
++                btnGoToRating.setVisibility(View.GONE);
++            } else if (proposalToShow.propositionState == PropositionState.TERMINATED.ordinal()) {
++                btnGoToRating.setText("Evaluer l'echange");
++                btnGoToRating.setOnClickListener(v -> {
++                    Bundle selectedPropositionBundle = new Bundle();
++                    selectedPropositionBundle.putSerializable(Constants.selectedBuyingProposalBundleKey, proposalToShow);
++                    Navigation.findNavController(v).navigate(R.id.action_buyingProposalDetail_to_ratingFragment, selectedPropositionBundle);
++                });
++            } else {
++                btnGoToRating.setVisibility(View.GONE);
++            }
++
+ 
+         } else {
+             Toast.makeText(getContext(), "Erreur de chargement des informations", Toast.LENGTH_SHORT).show();
+@@ -89,6 +110,12 @@
+             price = v.findViewById(R.id.detailPrice);
+             category = v.findViewById(R.id.detailProductCategory);
+             proposedPrice = v.findViewById(R.id.propPrice);
++            propFrom = v.findViewById(R.id.propFromDate);
++            propTo = v.findViewById(R.id.propToDate);
++            propDateStart = v.findViewById(R.id.propDateStart);
++            propDateEnd = v.findViewById(R.id.propDateEnd);
++            propDateEnd = v.findViewById(R.id.propDateEnd);
++            propState = v.findViewById(R.id.propState);
+ 
+             name.setText(buyingProp.productAnnounce.game.getName());
+             announcerName.setText(buyingProp.productAnnounce.announcer.getName());
+@@ -98,9 +125,27 @@
+             category.setText(buyingProp.productAnnounce.getGame().getCategory().getLabel());
+             parutionDate.setText(DateTool.formatStringDateDDMMYY(buyingProp.productAnnounce.getParution()));
+             proposedPrice.setText(Double.toString(buyingProp.getProposedAmount()));
++            propState.setText(PropositionState.values()[proposalToShow.getPropositionState()].getDisplayValue());
+             v = setProductImage(v, buyingProp.productAnnounce.getPhotoLink());
+-            Log.d("PROPOSAL TO SHOW", proposalToShow.productAnnounce.game.getName());
+-            Toast.makeText(getContext(), proposalToShow.productAnnounce.game.getName(), Toast.LENGTH_SHORT).show();
++
++
++
++            try {
++                propState.setBackgroundColor(Color.parseColor(PropositionState.values()[proposalToShow.propositionState].getColorString()));
++            } catch (Exception e) {
++                Log.d("PARSE COLOR ERROR", e.getMessage());
++            }
++
++            if (proposalToShow.propositionType == PropositionType.RENTAL.ordinal()) {
++                propDateStart.setText(DateTool.formatStringDateDDMMYY(proposalToShow.getRentalStart()));
++                propDateEnd.setText(DateTool.formatStringDateDDMMYY(proposalToShow.getRentalEnd()));
++            } else {
++                propFrom.setVisibility(View.GONE);
++                propTo.setVisibility(View.GONE);
++                propDateStart.setVisibility(View.GONE);
++                propDateEnd.setVisibility(View.GONE);
++            }
++
+         }
+ 
+         return v;
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">VGXchange</string>\r\n    <string name=\"title_home\">Home</string>\r\n    <string name=\"title_dashboard\">Dashboard</string>\r\n    <string name=\"title_notifications\">Notifications</string>\r\n    <string name=\"param\">Paramètres</string>\r\n    <string name=\"transaction\">Transactions</string>\r\n    <string name=\"annoncement\">Annonces</string>\r\n    <string name=\"hello\">Bonjourd</string>\r\n    <string name=\"profil\">Profil</string>\r\n    <string name=\"subscribe_to_VGXchange\">Inscrivez-vous à VGXchange</string>\r\n    <string name=\"first_name\">Prénom</string>\r\n    <string name=\"name\">Nom</string>\r\n    <string name=\"mail\">Adresse mail</string>\r\n    <string name=\"phone_number\">Numéro de téléphone</string>\r\n    <string name=\"password\">Mots de passe</string>\r\n    <string name=\"create_your_account\">Créez votre compte</string>\r\n    <string name=\"pseudo\">Pseudo</string>\r\n    <string name=\"game_name\">Jeu :</string>\r\n    <string name=\"parution_date\">Date :</string>\r\n    <string name=\"price\">Prix souhaité :</string>\r\n    <string name=\"rental_proposition\">Proposer location</string>\r\n    <string name=\"buying_proposition\">Proposer achat</string>\r\n    <string name=\"category\">Catégorie :</string>\r\n    <string name=\"proposition_state\">Etat:</string>\r\n    <string name=\"proposed_price\">Prix proposé</string>\r\n    <string name=\"proposed_rental_duration\">Durée proposée (j):</string>\r\n    <string name=\"proposed_rental_startdate\">Date de début proposée</string>\r\n    <string name=\"proposed_rental_enddate\">Date de fin proposée</string>\r\n    <string name=\"send_proposition\">Envoyer la proposition</string>\r\n    <string name=\"currency\">€</string>\r\n    <string name=\"name_vendor\">Nom :</string>\r\n    <string name=\"my_proposals\">Mes propositions</string>\r\n    <string name=\"received_proposals\">Propositions reçues</string>\r\n    <string name=\"rate_terminated_proposition\">Noter l echange (si TERMINATED)</string>\r\n    <string name=\"proposal_detail\">Detail proposition achat</string>\r\n    <string name=\"from\">Du</string>\r\n    <string name=\"to\">au</string>\r\n    <string name=\"date_start\">START</string>\r\n    <string name=\"date_end\">END</string>\r\n\r\n\r\n    <string-array name=\"users\">\r\n        <item>Jordan</item>\r\n        <item>Martin</item>\r\n        <item>Corentin</item>\r\n        <item>Joé</item>\r\n        <item>Hulk</item>\r\n        <item>Jordan</item>\r\n        <item>Martin</item>\r\n        <item>Corentin</item>\r\n        <item>Joé</item>\r\n        <item>Hulk</item>\r\n        <item>Jordan</item>\r\n        <item>Martin</item>\r\n        <item>Corentin</item>\r\n        <item>Joé</item>\r\n        <item>Hulk</item>\r\n        <item>Jordan</item>\r\n        <item>Martin</item>\r\n        <item>Corentin</item>\r\n        <item>Joé</item>\r\n        <item>Hulk</item>\r\n    </string-array>\r\n    string-array>\r\n\r\n    <string-array name=\"description\">\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n        <item>Description</item>\r\n    </string-array>\r\n    <!-- TODO: Remove or change this placeholder text -->\r\n    <string name=\"hello_blank_fragment\">Hello blank fragment</string>\r\n    <string name=\"noter_l_annonce\">Noter l\\'annonce</string>\r\n    <string name=\"ajouter_une_annonce\">Ajouter une Annonce</string>\r\n    <string name=\"Add_product\">Ajouter une Annonce</string>\r\n    <string name=\"My_product\">Mes Annonces</string>\r\n    <string name=\"mon_profil\">Mon Profil</string>\r\n    <string name=\"rating\">Evaluation</string>\r\n\r\n\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision 23756e291ee10634aaea8601eb0aac7a299f159d)
++++ app/src/main/res/values/strings.xml	(date 1621885766877)
+@@ -33,11 +33,15 @@
+     <string name="my_proposals">Mes propositions</string>
+     <string name="received_proposals">Propositions reçues</string>
+     <string name="rate_terminated_proposition">Noter l echange (si TERMINATED)</string>
+-    <string name="proposal_detail">Detail proposition achat</string>
++    <string name="proposal_detail">Detail de la proposition</string>
+     <string name="from">Du</string>
+     <string name="to">au</string>
+     <string name="date_start">START</string>
+     <string name="date_end">END</string>
++    <string name="rental_label">Location</string>
++    <string name="state_label">Statut:</string>
++    <string name="state">State</string>
++    <string name="DefaultButtonLabel">Boutton action proposition</string>
+ 
+ 
+     <string-array name="users">
+Index: app/src/main/res/layout/my_buying_proposal_row.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\" android:layout_width=\"match_parent\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    android:id=\"@+id/myBuyingProposalRow\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_height=\"wrap_content\"\r\n    tools:context=\"fragments.make_proposition.BuyingPropositionRecyclerViewAdapter\">\r\n\r\n\r\n    <androidx.cardview.widget.CardView\r\n        android:id=\"@+id/cardViewProposal\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        app:contentPadding=\"5dp\"\r\n\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        >\r\n\r\n        <androidx.constraintlayout.widget.ConstraintLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\">\r\n\r\n            <ImageView\r\n                android:id=\"@+id/buyProductImage\"\r\n                android:layout_width=\"120dp\"\r\n                android:layout_height=\"120dp\"\r\n                app:layout_constraintStart_toStartOf=\"parent\"\r\n                app:layout_constraintTop_toTopOf=\"parent\"\r\n                app:srcCompat=\"@mipmap/ic_launcher\"\r\n\r\n                />\r\n\r\n            <TextView\r\n                android:id=\"@+id/buyProductName\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"10dp\"\r\n                android:text=\"Name\"\r\n                android:textSize=\"18sp\"\r\n                android:textStyle=\"bold\"\r\n                app:layout_constraintStart_toEndOf=\"@+id/buyProductImage\"\r\n                app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/buyProductDescription\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"5dp\"\r\n                android:text=\"Description\"\r\n                android:textSize=\"16sp\"\r\n                app:layout_constraintStart_toStartOf=\"@+id/buyProductName\"\r\n                app:layout_constraintTop_toBottomOf=\"@+id/buyProductName\" />\r\n\r\n\r\n            <TextView\r\n                android:id=\"@+id/buyPropositionState\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:layout_marginEnd=\"10dp\"\r\n                android:text=\"@string/proposition_state\"\r\n                android:textSize=\"16sp\"\r\n                app:layout_constraintEnd_toEndOf=\"parent\"\r\n                app:layout_constraintTop_toTopOf=\"@+id/buyProductName\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/buyProposedPrice\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:layout_marginEnd=\"3dp\"\r\n\r\n                android:text=\"Price\"\r\n                android:textSize=\"16sp\"\r\n                app:layout_constraintEnd_toStartOf=\"@+id/currencyProposedPrice\"\r\n                app:layout_constraintTop_toBottomOf=\"@+id/buyPropositionState\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/currencyProposedPrice\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"@string/currency\"\r\n                app:layout_constraintEnd_toEndOf=\"@+id/buyPropositionState\"\r\n                app:layout_constraintTop_toTopOf=\"@+id/buyProposedPrice\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/buyAnnouncerLogin\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"5dp\"\r\n                android:text=\"@string/pseudo\"\r\n\r\n                android:textSize=\"16sp\"\r\n                app:layout_constraintStart_toStartOf=\"@+id/buyProductDescription\"\r\n                app:layout_constraintTop_toBottomOf=\"@+id/buyProductDescription\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/buyPropositionDate\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:text=\"Date\"\r\n                app:layout_constraintEnd_toEndOf=\"@+id/currencyProposedPrice\"\r\n                app:layout_constraintTop_toBottomOf=\"@+id/buyProposedPrice\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/fromDate\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"5dp\"\r\n                android:text=\"@string/from\"\r\n                app:layout_constraintStart_toStartOf=\"@+id/buyAnnouncerLogin\"\r\n                app:layout_constraintTop_toBottomOf=\"@+id/buyAnnouncerLogin\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/dateStart\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"5dp\"\r\n                android:text=\"@string/date_start\"\r\n                app:layout_constraintStart_toEndOf=\"@+id/fromDate\"\r\n                app:layout_constraintTop_toTopOf=\"@+id/fromDate\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/toDate\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"5dp\"\r\n                android:text=\"@string/to\"\r\n                app:layout_constraintStart_toEndOf=\"@+id/dateStart\"\r\n                app:layout_constraintTop_toTopOf=\"@+id/dateStart\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/dateEnd\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"5dp\"\r\n                android:text=\"@string/date_end\"\r\n                app:layout_constraintStart_toEndOf=\"@+id/toDate\"\r\n                app:layout_constraintTop_toTopOf=\"@+id/toDate\" />\r\n\r\n        </androidx.constraintlayout.widget.ConstraintLayout>\r\n    </androidx.cardview.widget.CardView>\r\n\r\n\r\n\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/my_buying_proposal_row.xml	(revision 23756e291ee10634aaea8601eb0aac7a299f159d)
++++ app/src/main/res/layout/my_buying_proposal_row.xml	(date 1621882780490)
+@@ -108,7 +108,7 @@
+                 app:layout_constraintTop_toBottomOf="@+id/buyProposedPrice" />
+ 
+             <TextView
+-                android:id="@+id/fromDate"
++                android:id="@+id/propFromDate"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="5dp"
+@@ -117,31 +117,31 @@
+                 app:layout_constraintTop_toBottomOf="@+id/buyAnnouncerLogin" />
+ 
+             <TextView
+-                android:id="@+id/dateStart"
++                android:id="@+id/propDateStart"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="5dp"
+                 android:text="@string/date_start"
+-                app:layout_constraintStart_toEndOf="@+id/fromDate"
+-                app:layout_constraintTop_toTopOf="@+id/fromDate" />
++                app:layout_constraintStart_toEndOf="@+id/propFromDate"
++                app:layout_constraintTop_toTopOf="@+id/propFromDate" />
+ 
+             <TextView
+-                android:id="@+id/toDate"
++                android:id="@+id/propToDate"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="5dp"
+                 android:text="@string/to"
+-                app:layout_constraintStart_toEndOf="@+id/dateStart"
+-                app:layout_constraintTop_toTopOf="@+id/dateStart" />
++                app:layout_constraintStart_toEndOf="@+id/propDateStart"
++                app:layout_constraintTop_toTopOf="@+id/propDateStart" />
+ 
+             <TextView
+-                android:id="@+id/dateEnd"
++                android:id="@+id/propDateEnd"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="5dp"
+                 android:text="@string/date_end"
+-                app:layout_constraintStart_toEndOf="@+id/toDate"
+-                app:layout_constraintTop_toTopOf="@+id/toDate" />
++                app:layout_constraintStart_toEndOf="@+id/propToDate"
++                app:layout_constraintTop_toTopOf="@+id/propToDate" />
+ 
+         </androidx.constraintlayout.widget.ConstraintLayout>
+     </androidx.cardview.widget.CardView>
+Index: app/src/main/res/layout/fragment_buying_proposal_detail.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    tools:context=\".fragments.make_proposition.BuyingProposalDetail\">\r\n\r\n    <fragment\r\n        android:id=\"@+id/fragment_vendor_integration\"\r\n        android:name=\"com.example.vgxchange.VendorFragment\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        tools:layout=\"@layout/fragment_vendor\" />\r\n\r\n    <fragment\r\n        android:id=\"@+id/fragment_product_information_fragment\"\r\n        android:name=\"com.example.vgxchange.ProductBasicInformationFragment\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"50dp\"\r\n        android:layout_marginTop=\"10dp\"\r\n        android:layout_marginEnd=\"50dp\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/fragment_vendor_integration\"\r\n        tools:layout=\"@layout/fragment_product_basic_information\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/btnGoToRating\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"70dp\"\r\n        android:layout_marginTop=\"50dp\"\r\n        android:text=\"@string/rate_terminated_proposition\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/propCurrency\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/propPriceLabel\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"5dp\"\r\n        android:layout_marginTop=\"50dp\"\r\n        android:text=\"@string/proposed_price\"\r\n        android:textSize=\"18sp\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/fragment_product_information_fragment\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/fragment_product_information_fragment\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/propPrice\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"10dp\"\r\n        android:text=\"@string/price\"\r\n        android:textSize=\"18sp\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/propPriceLabel\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/propPriceLabel\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/propCurrency\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"5dp\"\r\n        android:text=\"@string/currency\"\r\n        android:textSize=\"18sp\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/propPrice\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/propPrice\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_buying_proposal_detail.xml	(revision 23756e291ee10634aaea8601eb0aac7a299f159d)
++++ app/src/main/res/layout/fragment_buying_proposal_detail.xml	(date 1621885766873)
+@@ -33,8 +33,8 @@
+         android:id="@+id/btnGoToRating"
+         android:layout_width="match_parent"
+         android:layout_height="70dp"
+-        android:layout_marginTop="50dp"
+-        android:text="@string/rate_terminated_proposition"
++        android:layout_marginTop="70dp"
++        android:text="@string/DefaultButtonLabel"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/propCurrency" />
+@@ -43,8 +43,8 @@
+         android:id="@+id/propPriceLabel"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:layout_marginStart="5dp"
+-        android:layout_marginTop="50dp"
++        android:layout_marginStart="30dp"
++        android:layout_marginTop="20dp"
+         android:text="@string/proposed_price"
+         android:textSize="18sp"
+         app:layout_constraintStart_toStartOf="@+id/fragment_product_information_fragment"
+@@ -70,4 +70,75 @@
+         app:layout_constraintStart_toEndOf="@+id/propPrice"
+         app:layout_constraintTop_toTopOf="@+id/propPrice" />
+ 
++    <TextView
++        android:id="@+id/propFromDate"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="5dp"
++        android:text="@string/from"
++        android:textSize="16sp"
++        app:layout_constraintStart_toEndOf="@+id/propLabelRental"
++        app:layout_constraintTop_toTopOf="@+id/propLabelRental" />
++
++    <TextView
++        android:id="@+id/propDateStart"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="5dp"
++        android:text="@string/date_start"
++        android:textSize="16sp"
++        app:layout_constraintStart_toEndOf="@+id/propFromDate"
++        app:layout_constraintTop_toTopOf="@+id/propFromDate" />
++
++    <TextView
++        android:id="@+id/propToDate"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="5dp"
++        android:text="@string/to"
++        android:textSize="16sp"
++        app:layout_constraintStart_toEndOf="@+id/propDateStart"
++        app:layout_constraintTop_toTopOf="@+id/propDateStart" />
++
++    <TextView
++        android:id="@+id/propDateEnd"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="5dp"
++        android:text="@string/date_end"
++        android:textSize="16sp"
++        app:layout_constraintStart_toEndOf="@+id/propToDate"
++        app:layout_constraintTop_toTopOf="@+id/propToDate" />
++
++    <TextView
++        android:id="@+id/propLabelRental"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="5dp"
++        android:text="@string/rental_label"
++        android:textSize="16sp"
++        app:layout_constraintStart_toStartOf="@+id/propPriceLabel"
++        app:layout_constraintTop_toBottomOf="@+id/propPriceLabel" />
++
++    <TextView
++        android:id="@+id/propStateLabel"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="5dp"
++        android:text="@string/state_label"
++        android:textSize="16sp"
++        app:layout_constraintStart_toStartOf="@+id/propLabelRental"
++        app:layout_constraintTop_toBottomOf="@+id/propLabelRental" />
++
++    <TextView
++        android:id="@+id/propState"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="5dp"
++        android:text="@string/state"
++        android:textSize="16sp"
++        app:layout_constraintStart_toEndOf="@+id/propStateLabel"
++        app:layout_constraintTop_toTopOf="@+id/propStateLabel" />
++
++
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
